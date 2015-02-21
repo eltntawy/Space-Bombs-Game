@@ -19,11 +19,11 @@ var enemiesGenerator;
 var diamondGenerator;
 var aidGenerator;
 
-var fireSound ;
-var bumpSound ;
+var fireSound;
+var bumpSound;
 var platforms;
 
-var lives = new Array (3);
+var lives = new Array(3);
 var liveCount = 3;
 
 var gameStage = {
@@ -31,28 +31,28 @@ var gameStage = {
 
         console.log('game state preload');
 
-        var backgroundIndex = Math.round(1 + Math.random() *2);
-        var backgroundURL = 'assets/spaceBackground'+backgroundIndex+'.png';
-        console.log('backgroundURL : '+backgroundURL);
-        game.load.image('backgroundGame',backgroundURL);
-        game.load.image('tryAgain','assets/try-again.png');
+        var backgroundIndex = Math.round(1 + Math.random() * 2);
+        var backgroundURL = 'assets/spaceBackground' + backgroundIndex + '.png';
+        console.log('backgroundURL : ' + backgroundURL);
+        game.load.image('backgroundGame', backgroundURL);
+        game.load.image('tryAgain', 'assets/try-again.png');
         game.load.image('platform', 'assets/platform.png');
-        
+
         game.load.spritesheet('player', 'assets/dude.png', 32, 48);
         game.load.image('platform', 'assets/platform.png');
         game.load.image('star', 'assets/star.png');
         game.load.image('diamond', 'assets/diamond.png');
         game.load.image('aid', 'assets/firstaid.png');
-        
+
         game.load.spritesheet('enemy0', 'assets/baddie.png', 32, 32);
-        game.load.image('enemy1','assets/Enemy.png');
-        game.load.image('enemy2','assets/Enemy2.png');
-        
-        
+        game.load.image('enemy1', 'assets/Enemy.png');
+        game.load.image('enemy2', 'assets/Enemy2.png');
+
+
         game.load.image('bullet', 'assets/bullet.png');
 
-        game.load.audio('fireSound','assets/audio/266977_SOUNDDOGS__gu.mp3');
-        game.load.audio('bumpSound','assets/audio/bump.mp3');
+        game.load.audio('fireSound', 'assets/audio/266977_SOUNDDOGS__gu.mp3');
+        game.load.audio('bumpSound', 'assets/audio/bump.mp3');
     },
 
     create: function () {
@@ -83,12 +83,11 @@ var gameStage = {
         //this.ground.autoScroll(-50, 0);
         scoreText = game.add.text(10, 10, 'Game Score = 0', {fontsize: 60, fill: 'white'});
 
-        for(var i = 0 ; i < liveCount ; i ++){
-            lives [i] = game.add.sprite(10+i*30,30,'player');
+        for (var i = 0; i < liveCount; i++) {
+            lives [i] = game.add.sprite(10 + i * 30, 30, 'player');
         }
 
-        
-        
+
         /**************************************************************************************/
         // Player
         /**************************************************************************************/
@@ -111,8 +110,8 @@ var gameStage = {
         bullets.setAll('anchor.y', 0.5);
         bullets.setAll('outOfBoundsKill', true);
         bullets.setAll('checkWorldBounds', true);
-        
-        
+
+
         /**************************************************************************************/
         // game collectors
         /**************************************************************************************/
@@ -132,18 +131,18 @@ var gameStage = {
         // generators
         /**************************************************************************************/
         var numberOfEnemy = 2;
-        if(gameDifficulty == 1) {
+        if (gameDifficulty == 1) {
             numberOfEnemy = 1
-        } 
+        }
         if (gameDifficulty == 2) {
             numberOfEnemy = 0.5;
         }
-        if(gameDifficulty == 3) {
+        if (gameDifficulty == 3) {
             numberOfEnemy = 0.25;
         }
-        
+
         starsGenerator = game.time.events.loop(Phaser.Timer.SECOND * 5, this.generatorStar, this);
-        enemiesGenerator = game.time.events.loop(Phaser.Timer.SECOND *numberOfEnemy, this.generatorAnemy, this);
+        enemiesGenerator = game.time.events.loop(Phaser.Timer.SECOND * numberOfEnemy, this.generatorAnemy, this);
         diamondGenerator = game.time.events.loop(Phaser.Timer.SECOND * 30, this.generatorDiamond, this);
         aidGenerator = game.time.events.loop(Phaser.Timer.SECOND * 60, this.generatorAid, this);
 
@@ -177,11 +176,15 @@ var gameStage = {
         player.body.velocity.x = 0;
         if (cursors.left.isDown) {
             player.body.velocity.x = -150;
-            player.animations.play('left');
+            
+            if (player.body.touching.down)
+                player.animations.play('left');
 
         } else if (cursors.right.isDown) {
             player.body.velocity.x = 150;
-            player.animations.play('right');
+            
+            if (player.body.touching.down)
+                player.animations.play('right');
 
         } else {
             player.animations.stop();
@@ -190,20 +193,16 @@ var gameStage = {
 
         if (cursors.up.isDown) {
             player.body.velocity.y = -150;
-            player.animations.play('right');
+            player.frame = 6;
 
         } else if (cursors.down.isDown) {
             player.body.velocity.y = 150;
-            player.animations.play('right');
+            player.frame = 6;
 
         }
-        else {
-            player.animations.stop();
-            player.frame = 4;
-        }
 
-        if (game.input.activePointer.isDown)
-        {
+
+        if (game.input.activePointer.isDown) {
             //  Boom!
             this.fire();
         }
@@ -222,10 +221,10 @@ var gameStage = {
         score += 10;
         aid.kill();
 
-        lives [liveCount] = game.add.sprite(10+liveCount*30,30,'player');
+        lives [liveCount] = game.add.sprite(10 + liveCount * 30, 30, 'player');
 
         liveCount++;
-        
+
 
     }, collectDiamond: function (player, diamond) {
         diamond.kill();
@@ -238,42 +237,45 @@ var gameStage = {
     collectAnemy: function (player, enemy) {
 
         enemy.kill();
-        console.log('liveCount : '+liveCount);
-        console.log('lives length : '+lives.length);
-        
-        lives[liveCount-1].kill();
-        liveCount--;
-        
+        console.log('liveCount : ' + liveCount);
+        console.log('lives length : ' + lives.length);
 
-        if(liveCount == 0) {
+        lives[liveCount - 1].kill();
+        liveCount--;
+
+
+        if (liveCount == 0) {
             player.kill();
-            
-            var textGameOver = game.add.text(game.world.centerX ,game.world.centerY-100,'Game Over', {fontsize: 60, fill: 'white'});
-            textGameOver.anchor.setTo(0.5,0.5);
-            
-            var tryAgainButton = game.add.button(game.world.centerX-100,game.world.centerY,'tryAgain',function () {
-            tryAgainButton.anchor.setTo(0.5,0.5);
-                
+
+            var textGameOver = game.add.text(game.world.centerX, game.world.centerY - 100, 'Game Over', {
+                fontsize: 60,
+                fill: 'white'
+            });
+            textGameOver.anchor.setTo(0.5, 0.5);
+
+            var tryAgainButton = game.add.button(game.world.centerX - 100, game.world.centerY, 'tryAgain', function () {
+                tryAgainButton.anchor.setTo(0.5, 0.5);
+
                 liveCount = 3;
                 score = 0;
                 game.state.start('game');
             });
-            
+
         }
 
 
     },
-    killAnemy : function (bullet, enemy) {
+    killAnemy: function (bullet, enemy) {
 
         bumpSound.play();
-        
+
         enemy.kill();
         bullet.kill();
 
-        
+
         score += 10;
         scoreText.text = 'Game Score = ' + score;
-        
+
     },
     generatorStar: function () {
         // stars
@@ -291,7 +293,7 @@ var gameStage = {
         /**************************************************************************************/
         var randomSpeed = 50 + Math.random() * 200;
         var randomY = 1 + Math.random() * 500;
-        var enemy= enemies.create(this.world.width, randomY, 'enemy');
+        var enemy = enemies.create(this.world.width, randomY, 'enemy');
         enemy.animations.add('animate', [0, 1, 2, 3, 4], true);
         enemy.animations.play('animate');
 
@@ -320,8 +322,8 @@ var gameStage = {
         /**************************************************************************************/
         var randomSpeed = 50 + Math.random() * 200;
         var randomY = 1 + Math.random() * 500;
-        var enemy = 'enemy'+Math.round(Math.random()*2);
-        var enemy= enemies.create(this.world.width, randomY, enemy);
+        var enemy = 'enemy' + Math.round(Math.random() * 2);
+        var enemy = enemies.create(this.world.width, randomY, enemy);
         enemy.body.gravity.x = -1 * randomSpeed;
         //enemy.body.bounce.x = 0.7 + Math.random() * 0.2;
         /**************************************************************************************/
@@ -349,8 +351,8 @@ var gameStage = {
     },
     fire: function () {
 
-        if (game.time.now > nextFire && bullets.countDead() >= 1 && liveCount >0) {
-            nextFire = game.time.now + fireRate - score/3;
+        if (game.time.now > nextFire && bullets.countDead() >= 1 && liveCount > 0) {
+            nextFire = game.time.now + fireRate - score / 3;
 
             var bullet = bullets.getFirstExists(false);
             bullet.reset(player.x, player.y);
