@@ -37,7 +37,7 @@ var menuStage = {
         this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'gameLogo');
         this.sprite.anchor.setTo(0.5, 0.5);
 
-        this.titleText = this.game.add.text(this.game.world.centerX, 300, 'Space Bump Game!', style);
+        this.titleText = this.game.add.text(this.game.world.centerX, 300, 'Space Bombs Game!', style);
         this.titleText.anchor.setTo(0.5, 0.5);
 
         this.instructionsText = game.add.button(this.game.world.centerX, 400, 'startButton', this.startClick);
