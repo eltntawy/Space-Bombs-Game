@@ -141,6 +141,10 @@ var gameStage = {
             numberOfEnemy = 0.25;
         }
 
+        if (gameDifficulty == 4) {
+            numberOfEnemy = 0.05;
+        }
+
         starsGenerator = game.time.events.loop(Phaser.Timer.SECOND * 5, this.generatorStar, this);
         enemiesGenerator = game.time.events.loop(Phaser.Timer.SECOND * numberOfEnemy, this.generatorAnemy, this);
         diamondGenerator = game.time.events.loop(Phaser.Timer.SECOND * 30, this.generatorDiamond, this);

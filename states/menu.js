@@ -17,6 +17,7 @@ var menuStage = {
         game.load.image('easy', 'assets/button-easy.png');
         game.load.image('medium', 'assets/button-medium.png');
         game.load.image('hard', 'assets/button-hard.png');
+        game.load.image('ultraHard', 'assets/button-ultraHard.png');
 
 
         game.load.audio('music', 'assets/audio/naruto_background.mp3');
@@ -43,22 +44,25 @@ var menuStage = {
         this.instructionsText.anchor.setTo(0.5, 0.5);
 
 
-        this.instructionsText = game.add.button(this.game.world.centerX - 150, 490, 'easy', function () {
+        this.instructionsText = game.add.button(this.game.world.centerX - 200, 490, 'easy', function () {
             gameDifficulty = 1;
         });
         this.instructionsText.anchor.setTo(0.5, 0.5);
 
-        this.instructionsText = game.add.button(this.game.world.centerX, 490, 'medium', function () {
+        this.instructionsText = game.add.button(this.game.world.centerX - 75, 490, 'medium', function () {
             gameDifficulty = 2;
         });
         this.instructionsText.anchor.setTo(0.5, 0.5);
 
-        this.instructionsText = game.add.button(this.game.world.centerX + 150, 490, 'hard', function () {
+        this.instructionsText = game.add.button(this.game.world.centerX + 75, 490, 'hard', function () {
             gameDifficulty = 3;
         });
-        
         this.instructionsText.anchor.setTo(0.5, 0.5);
 
+        this.instructionsText = game.add.button(this.game.world.centerX + 200, 490, 'ultraHard', function () {
+            gameDifficulty = 4;
+        });
+        this.instructionsText.anchor.setTo(0.5, 0.5);
 
         this.sprite.angle = -20;
         this.game.add.tween(this.sprite).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
