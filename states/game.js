@@ -26,6 +26,11 @@ var platforms;
 var lives = new Array(3);
 var liveCount = 3;
 
+var keyUp;
+var keyDown;
+var keyLeft;
+var keyRight;
+
 var gameStage = {
     preload: function () {
 
@@ -87,6 +92,13 @@ var gameStage = {
             lives [i] = game.add.sprite(10 + i * 30, 30, 'player');
         }
 
+        /**************************************************************************************/
+        // keyboard
+        /**************************************************************************************/
+        keyUp = game.input.keyboard.addKey(Phaser.Keyboard.W);
+        keyDown = game.input.keyboard.addKey(Phaser.Keyboard.S);
+        keyLeft = game.input.keyboard.addKey(Phaser.Keyboard.A);
+        keyRight = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
         /**************************************************************************************/
         // Player
@@ -178,13 +190,13 @@ var gameStage = {
         var cursors = game.input.keyboard.createCursorKeys();
 
         player.body.velocity.x = 0;
-        if (cursors.left.isDown) {
+        if (cursors.left.isDown || keyLeft.isDown) {
             player.body.velocity.x = -150;
             
             if (player.body.touching.down)
                 player.animations.play('left');
 
-        } else if (cursors.right.isDown) {
+        } else if (cursors.right.isDown || keyRight.isDown) {
             player.body.velocity.x = 150;
             
             if (player.body.touching.down)
@@ -195,11 +207,11 @@ var gameStage = {
             player.frame = 4;
         }
 
-        if (cursors.up.isDown) {
+        if (cursors.up.isDown  || keyUp.isDown) {
             player.body.velocity.y = -150;
             player.frame = 6;
 
-        } else if (cursors.down.isDown) {
+        } else if (cursors.down.isDown || keyDown.isDown ) {
             player.body.velocity.y = 150;
             player.frame = 6;
 
